@@ -39,7 +39,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
 	modelBlock_ = Model::CreateFromOBJ("block");
-	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
+	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
 
 	// マップチップフィールドの生成
