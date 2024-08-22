@@ -27,7 +27,6 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Initialize() {
-
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -43,7 +42,7 @@ void GameScene::Initialize() {
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
 
 	// マップチップフィールドの生成
-	mapChipField_ = new MapChipField;
+	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	// 自キャラの生成
@@ -54,8 +53,6 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
 
-	viewProjection_.Initialize();
-
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
@@ -64,7 +61,7 @@ void GameScene::Initialize() {
 
 	GenerateBlocks();
 
-	cameraController = new CameraController;
+	cameraController = new CameraController();
 	cameraController->Initialize();
 	cameraController->SetTarget(player_);
 	cameraController->Reset();
