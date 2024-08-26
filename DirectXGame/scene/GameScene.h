@@ -5,6 +5,7 @@
 #include "DeathParticles.h"
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
+#include "Goal.h"
 #include "Input.h"
 #include "MapChipField.h"
 #include "Model.h"
@@ -51,7 +52,7 @@ public: // メンバ関数
 private: // メンバ変数
 	enum class Phase {
 		kPlay,  // ゲームプレイ
-		kDeath, // デス演出
+		kGoal, // ゲームクリア
 	};
 
 	DirectXCommon* dxCommon_ = nullptr;
@@ -83,14 +84,22 @@ private: // メンバ変数
 	MapChipField* mapChipField_;
 	CameraController* cameraController = nullptr;
 
+	std::list<Goal*> goals_;
+
 	bool finished_ = false;
 	Phase phase_;
 
 	DeathParticles* deathParticles_ = nullptr;
+
+	void ChangePhase();
 
 	void GenerateBlocks();
 
 	void UpdateCamera();
 
 	void UpdateBlocks();
+
+	// 衝突判定と応答
+
+	void CheckAllCollisions();
 };

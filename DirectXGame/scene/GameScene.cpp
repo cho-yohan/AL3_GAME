@@ -10,6 +10,9 @@ GameScene::~GameScene() {
 
 	delete deathParticles_;
 	delete player_;
+	for (Goal* goal : goals_) {
+		delete goal;
+	}
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -69,6 +72,13 @@ void GameScene::Initialize() {
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController->SetMovableArea(cameraArea);
 
+	// 敵の生成
+	Goal* newGoal = new Goal();
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(18, 29);
+	newGoal->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+
+	goals_.push_back(newGoal);
+
 	phase_ = Phase::kPlay;
 }
 
@@ -83,15 +93,21 @@ void GameScene::Update() {
 
 		cameraController->Update();
 
+		for (Goal* goal : goals_) {
+			goal->Update();
+		}
+
 		UpdateCamera();
 
 		UpdateBlocks();
 
+		CheckAllCollisions();
 		break;
-	case Phase::kDeath:
-		if (deathParticles_ && deathParticles_->IsFinished()) {
+	case Phase::kGoal:
+		if (player_->IsGoal()) {
 			finished_ = true;
 		}
+		
 		worldTransformSkydome_.UpdateMatrix();
 
 		if (deathParticles_) {
@@ -140,7 +156,14 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
-	player_->Draw();
+	if (!player_->IsGoal()) {
+		// 自キャラの描画
+		player_->Draw();
+	}
+
+	for (Goal* goal : goals_) {
+		goal->Draw();
+	}
 
 	if (deathParticles_) {
 		deathParticles_->Draw();
@@ -162,6 +185,26 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::ChangePhase() {
+	switch (phase_) {
+	case Phase::kPlay:
+		if (player_->IsGoal()) {
+			// 死亡演出
+			phase_ = Phase::kGoal;
+
+			/*const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+
+			deathParticles_ = new DeathParticles;
+
+			deathParticles_->Initialize(modelDeathParticle_, &viewProjection_, deathParticlesPosition);*/
+		}
+		break;
+	case Phase::kGoal:
+
+		break;
+	}
 }
 
 void GameScene::GenerateBlocks() {
@@ -225,4 +268,31 @@ void GameScene::UpdateBlocks() {
 			worldTransformBlock->UpdateMatrix();
 		}
 	}
+}
+
+void GameScene::CheckAllCollisions() {
+
+	// 判定対象1と2座標
+	AABB aabb1, aabb2;
+
+#pragma region 自キャラと敵キャラの当たり判定
+	{
+		// 自キャラの座標
+		aabb1 = player_->GetAABB();
+
+		// 自キャラと擲弾全ての当たり判定
+		for (Goal* goal : goals_) {
+			// 擲弾の座標
+			aabb2 = goal->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自キャラの衝突時コールバックを呼び出す
+				player_->OnCollision(goal);
+				// 擲弾の衝突時コールバックを呼び出す
+				goal->OnCollision(player_);
+			}
+		}
+	}
+#pragma endregion
 }

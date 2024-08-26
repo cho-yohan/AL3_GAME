@@ -6,16 +6,19 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include "TitleScene.h"
+#include "ClearScene.h"
 #include "WinApp.h"
 
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
+ClearScene* clearScene = nullptr;
 
 enum class Scene {
 	kUnknown = 0,
 
 	kTitle,
 	kGame,
+	kClear,
 };
 
 Scene scene = Scene::kTitle;
@@ -37,9 +40,19 @@ void ChangeScene() {
 	case Scene::kGame:
 		if (gameScene->IsFinished()) {
 			// シーン変更
-			scene = Scene::kTitle;
+			scene = Scene::kClear;
 			delete gameScene;
 			gameScene = nullptr;
+			clearScene = new ClearScene;
+			clearScene->Initialize();
+		}
+		break;
+	case Scene::kClear:
+		if (clearScene->IsFinished()) {
+			// シーン変更
+			scene = Scene::kTitle;
+			delete clearScene;
+			clearScene = nullptr;
 			titleScene = new TitleScene;
 			titleScene->Initialize();
 		}
@@ -54,6 +67,9 @@ void UpdateScene() {
 	case Scene::kGame:
 		gameScene->Update();
 		break;
+	case Scene::kClear:
+		clearScene->Update();
+		break;
 	}
 }
 void DrawScene() {
@@ -63,6 +79,9 @@ void DrawScene() {
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
+		break;
+	case Scene::kClear:
+		clearScene->Draw();
 		break;
 	}
 }
@@ -157,6 +176,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 各種解放
 	delete titleScene;
 	delete gameScene;
+	delete clearScene;
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();

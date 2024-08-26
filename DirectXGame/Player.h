@@ -1,10 +1,12 @@
 #pragma once
 
+#include "AABB.h"
 #include "Model.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
 class MapChipField;
+class Goal;
 
 /// <summary>
 /// 自キャラ
@@ -43,12 +45,20 @@ public:
 	/// </summary>
 	void Draw();
 
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
+	void OnCollision(const Goal* enemy);
+
 	// setter
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 	// getter
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
 	const Vector3& GetVelocity() const { return velocity_; }
+	bool IsGoal() const { return isGoal_; };
 
 private:
 	static inline const float kAcceleration = 0.1f;
@@ -89,6 +99,7 @@ private:
 	float turnTimer_ = 0.0f;
 	// マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
+	bool isGoal_ = false;
 
 	void InputMove();
 	void CheckMapCollision(CollisionMapInfo& info);

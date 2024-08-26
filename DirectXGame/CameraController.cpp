@@ -8,18 +8,15 @@ void CameraController::Initialize() { viewProjection_.Initialize(); }
 /// 更新
 void CameraController::Update() {
 
-	if (!target_)
-		return;
-
 	// 追従対象のワールドトランスフォームを参照
 	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
 	Vector3 targetVelocity = target_->GetVelocity();
 
-	destination_.x = viewProjection_.translation_.x; // X座標は変更しない
-	destination_.y = targetWorldTransform.translation_.y + targetOffset_.y;
-	destination_.z = targetWorldTransform.translation_.z + targetOffset_.z;
+	//destination_.x = targetWorldTransform.translation_.x + targetOffset_.x * targetVelocity.x + targetOffset_.x;
+	destination_.y = targetWorldTransform.translation_.y + targetOffset_.y * targetVelocity.y + targetOffset_.y;
+	destination_.z = targetWorldTransform.translation_.z + targetOffset_.z * targetVelocity.z + targetOffset_.z;
 
-	viewProjection_.translation_.x = Lerp(viewProjection_.translation_.x, destination_.x, kInterpolationRate_);
+	//viewProjection_.translation_.x = Lerp(viewProjection_.translation_.x, destination_.x, kInterpolationRate_);
 	viewProjection_.translation_.y = Lerp(viewProjection_.translation_.y, destination_.y, kInterpolationRate_);
 	viewProjection_.translation_.z = Lerp(viewProjection_.translation_.z, destination_.z, kInterpolationRate_);
 
@@ -37,14 +34,11 @@ void CameraController::Update() {
 
 void CameraController::Reset() {
 
-	if (!target_)
-		return;
-
 	// 追従対象のワールドトランスフォームを参照
 	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
 
 	// 追従対象とオフセットからカメラの座標を計算
-	viewProjection_.translation_.x = viewProjection_.translation_.x;
+	viewProjection_.translation_.x = targetWorldTransform.translation_.x; // X軸の位置を維持
 	viewProjection_.translation_.y = targetWorldTransform.translation_.y + targetOffset_.y;
-	viewProjection_.translation_.z = targetWorldTransform.translation_.z + targetOffset_.z;
+	viewProjection_.translation_.z = targetWorldTransform.translation_.z; // Z軸の位置を維持
 }
