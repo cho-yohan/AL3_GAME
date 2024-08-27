@@ -33,7 +33,7 @@ void ChangeScene() {
 			delete titleScene;
 			titleScene = nullptr;
 			// 新シーンの生成と初期化
-			gameScene = new GameScene;
+			gameScene = new GameScene();
 			gameScene->Initialize();
 		}
 		break;
@@ -43,7 +43,7 @@ void ChangeScene() {
 			scene = Scene::kClear;
 			delete gameScene;
 			gameScene = nullptr;
-			clearScene = new ClearScene;
+			clearScene = new ClearScene();
 			clearScene->Initialize();
 		}
 		break;
@@ -53,7 +53,7 @@ void ChangeScene() {
 			scene = Scene::kTitle;
 			delete clearScene;
 			clearScene = nullptr;
-			titleScene = new TitleScene;
+			titleScene = new TitleScene();
 			titleScene->Initialize();
 		}
 		break;

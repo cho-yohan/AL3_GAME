@@ -9,10 +9,10 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 
 	delete deathParticles_;
-	delete player_;
 	for (Goal* goal : goals_) {
 		delete goal;
 	}
+	delete player_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -30,6 +30,7 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Initialize() {
+
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -39,22 +40,24 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("player");
-	modelEnemy_ = Model::CreateFromOBJ("enemy");
+	modelEnemy_ = Model::CreateFromOBJ("goal");
 	modelBlock_ = Model::CreateFromOBJ("block");
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
 
 	// マップチップフィールドの生成
-	mapChipField_ = new MapChipField();
+	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
 	// 座標をマップチップ番号で指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3, 38);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(4, 38);
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
+
+	viewProjection_.Initialize();
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
@@ -64,7 +67,7 @@ void GameScene::Initialize() {
 
 	GenerateBlocks();
 
-	cameraController = new CameraController();
+	cameraController = new CameraController;
 	cameraController->Initialize();
 	cameraController->SetTarget(player_);
 	cameraController->Reset();
@@ -74,7 +77,7 @@ void GameScene::Initialize() {
 
 	// 敵の生成
 	Goal* newGoal = new Goal();
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(18, 29);
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(19, 29);
 	newGoal->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
 	goals_.push_back(newGoal);
@@ -83,6 +86,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	ChangePhase();
 
 	switch (phase_) {
 	case Phase::kPlay:
@@ -102,13 +107,20 @@ void GameScene::Update() {
 		UpdateBlocks();
 
 		CheckAllCollisions();
+
+		if (player_->IsGoal()) {
+			CheckAllCollisions();
+		}
 		break;
 	case Phase::kGoal:
-		if (player_->IsGoal()) {
+		if (deathParticles_ && deathParticles_->IsFinished()) {
 			finished_ = true;
 		}
-		
 		worldTransformSkydome_.UpdateMatrix();
+
+		for (Goal* goal : goals_) {
+			goal->Update();
+		}
 
 		if (deathParticles_) {
 			deathParticles_->Update();
@@ -194,11 +206,11 @@ void GameScene::ChangePhase() {
 			// 死亡演出
 			phase_ = Phase::kGoal;
 
-			/*const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
 
 			deathParticles_ = new DeathParticles;
 
-			deathParticles_->Initialize(modelDeathParticle_, &viewProjection_, deathParticlesPosition);*/
+			deathParticles_->Initialize(modelDeathParticle_, &viewProjection_, deathParticlesPosition);
 		}
 		break;
 	case Phase::kGoal:

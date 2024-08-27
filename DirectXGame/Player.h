@@ -50,7 +50,7 @@ public:
 
 	AABB GetAABB();
 
-	void OnCollision(const Goal* enemy);
+	void OnCollision(const Goal* goal);
 
 	// setter
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
@@ -83,21 +83,14 @@ private:
 		Vector3 move;
 	};
 
-	// モデル
 	Model* model_ = nullptr;
-	// ワールド変換データ
 	WorldTransform worldTransform_;
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
-
 	bool onGround_ = true;
-
 	LRDirection lrDirection_ = LRDirection::kRight;
-	// 旋回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
-	// 旋回タイマー
 	float turnTimer_ = 0.0f;
-	// マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
 	bool isGoal_ = false;
 
