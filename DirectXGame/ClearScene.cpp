@@ -22,7 +22,7 @@ void ClearScene::Initialize() {
 }
 
 void ClearScene::Update() {
-	if (player_->IsGoal()) {
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		finished_ = true;
 	}
 	counter_ += 1.0f / 60.0f;
@@ -41,6 +41,7 @@ void ClearScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
+	
 	Model::PreDraw(commandList);
 	modelTitle_->Draw(worldTransformTitle_, viewProjection_);
 	Model::PostDraw();
