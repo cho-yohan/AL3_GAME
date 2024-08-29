@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// 自キャラの初期化
 	// 座標をマップチップ番号で指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(4, 38);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(4, 48);
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipField(mapChipField_);
 
@@ -77,7 +77,7 @@ void GameScene::Initialize() {
 
 	// 敵の生成
 	Goal* newGoal = new Goal();
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(19, 29);
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(18, 9);
 	newGoal->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
 	goals_.push_back(newGoal);
