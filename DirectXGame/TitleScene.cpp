@@ -9,11 +9,13 @@
 TitleScene::~TitleScene() { 
 	delete modelTitle_;
 	delete modelPlayer_;
+	delete modelSkydome_;
 }
 
 void TitleScene::Initialize() {
 	modelTitle_ = Model::CreateFromOBJ("text", true); 
 	modelPlayer_ = Model::CreateFromOBJ("player");
+	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
@@ -27,6 +29,8 @@ void TitleScene::Initialize() {
 	worldTransformTitle_.Initialize();
 	worldTransformTitle_.scale_ = {kTextTitle, kTextTitle, kTextTitle};
 	worldTransformTitle_.rotation_.y = 0.99f * std::numbers::pi_v<float>;
+
+	worldTransformSkydome_.Initialize();
 }
 
 void TitleScene::Update() {
@@ -38,7 +42,7 @@ void TitleScene::Update() {
 
 	float angle = counter_ / kTimeTitleMove * 2.0f * std::numbers::pi_v<float>;
 
-	worldTransformTitle_.translation_.y = std::sin(angle) + 10.0f;
+	worldTransformTitle_.translation_.y = std::sin(angle) + 9.0f;
 
 	viewProjection_.TransferMatrix();
 	worldTransformTitle_.UpdateMatrix();
@@ -51,6 +55,7 @@ void TitleScene::Draw() {
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	Model::PreDraw(commandList);
+	modelSkydome_->Draw(worldTransformSkydome_, viewProjection_);
 	modelTitle_->Draw(worldTransformTitle_, viewProjection_);
 	modelPlayer_->Draw(worldTransformPlayer_, viewProjection_);
 	Model::PostDraw();

@@ -8,10 +8,12 @@
 
 ClearScene::~ClearScene() {
 	delete modelTitle_;
+	delete modelSkydome_;
 }
 
 void ClearScene::Initialize() {
-	modelTitle_ = Model::CreateFromOBJ("text", true);
+	modelTitle_ = Model::CreateFromOBJ("clear", true);
+	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
@@ -19,6 +21,9 @@ void ClearScene::Initialize() {
 	worldTransformTitle_.Initialize();
 	worldTransformTitle_.scale_ = {kTextTitle, kTextTitle, kTextTitle};
 	worldTransformTitle_.rotation_.y = 0.99f * std::numbers::pi_v<float>;
+	worldTransformTitle_.translation_.y = -4.0f;
+
+	worldTransformSkydome_.Initialize();
 }
 
 void ClearScene::Update() {
@@ -30,7 +35,7 @@ void ClearScene::Update() {
 
 	float angle = counter_ / kTimeTitleMove * 2.0f * std::numbers::pi_v<float>;
 
-	worldTransformTitle_.translation_.y = std::sin(angle) + 10.0f;
+	worldTransformTitle_.translation_.y = std::sin(angle) - 2.0f;
 
 	viewProjection_.TransferMatrix();
 	worldTransformTitle_.UpdateMatrix();
@@ -43,6 +48,7 @@ void ClearScene::Draw() {
 
 	
 	Model::PreDraw(commandList);
+	modelSkydome_->Draw(worldTransformSkydome_, viewProjection_);
 	modelTitle_->Draw(worldTransformTitle_, viewProjection_);
 	Model::PostDraw();
 }

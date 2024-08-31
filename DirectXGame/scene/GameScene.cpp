@@ -20,7 +20,7 @@ GameScene::~GameScene() {
 		}
 	}
 	delete modelDeathParticle_;
-	delete modelEnemy_;
+	delete modelGoal_;
 	delete modelPlayer_;
 	delete modelBlock_;
 	delete debugCamera_;
@@ -40,7 +40,7 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("player");
-	modelEnemy_ = Model::CreateFromOBJ("goal");
+	modelGoal_ = Model::CreateFromOBJ("goal");
 	modelBlock_ = Model::CreateFromOBJ("block");
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
@@ -77,8 +77,8 @@ void GameScene::Initialize() {
 
 	// 敵の生成
 	Goal* newGoal = new Goal();
-	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(18, 29);
-	newGoal->Initialize(modelEnemy_, &viewProjection_, goalPosition);
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(18, 68);
+	newGoal->Initialize(modelGoal_, &viewProjection_, goalPosition);
 
 	goals_.push_back(newGoal);
 

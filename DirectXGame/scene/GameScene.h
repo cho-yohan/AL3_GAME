@@ -72,7 +72,7 @@ private: // メンバ変数
 	Model* modelPlayer_ = nullptr;
 	Model* modelBlock_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-	Model* modelEnemy_ = nullptr;
+	Model* modelGoal_ = nullptr;
 	Model* modelDeathParticle_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	WorldTransform worldTransformSkydome_;

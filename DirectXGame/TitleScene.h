@@ -22,9 +22,11 @@ private:
 	ViewProjection viewProjection_;
 	WorldTransform worldTransformTitle_;
 	WorldTransform worldTransformPlayer_;
+	WorldTransform worldTransformSkydome_;
 
 	Model* modelTitle_ = nullptr;
 	Model* modelPlayer_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	float counter_ = 0.0f;
 	bool finished_ = false;

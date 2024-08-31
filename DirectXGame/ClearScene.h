@@ -3,7 +3,6 @@
 #include "Model.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "Player.h"
 
 class ClearScene {
 public:
@@ -22,10 +21,10 @@ private:
 
 	ViewProjection viewProjection_;
 	WorldTransform worldTransformTitle_;
+	WorldTransform worldTransformSkydome_;
 
 	Model* modelTitle_ = nullptr;
-
-	Player* player_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	float counter_ = 0.0f;
 	bool finished_ = false;
