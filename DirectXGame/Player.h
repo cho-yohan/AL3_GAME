@@ -7,6 +7,7 @@
 
 class MapChipField;
 class Goal;
+class JumpBlock;
 
 /// <summary>
 /// 自キャラ
@@ -51,6 +52,7 @@ public:
 	AABB GetAABB();
 
 	void OnCollision(const Goal* goal);
+	void JumpOnCollision(const JumpBlock* jumpBlock);
 
 	// setter
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }

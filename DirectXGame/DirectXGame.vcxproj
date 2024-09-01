@@ -114,6 +114,7 @@
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
     <ClCompile Include="Goal.cpp" />
+    <ClCompile Include="JumpBlock.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="myMath.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Easing.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="JumpBlock.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />

@@ -7,7 +7,7 @@
 
 class Player;
 
-class Goal {
+class JumpBlock {
 public:
 	/// <summary>
 	/// 敵
