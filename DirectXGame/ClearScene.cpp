@@ -17,9 +17,9 @@ void ClearScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	const float kTextTitle = 10.0f;
+	const float kClearText = 10.0f;
 	worldTransformTitle_.Initialize();
-	worldTransformTitle_.scale_ = {kTextTitle, kTextTitle, kTextTitle};
+	worldTransformTitle_.scale_ = {kClearText, kClearText, kClearText};
 	worldTransformTitle_.rotation_.y = 0.99f * std::numbers::pi_v<float>;
 	worldTransformTitle_.translation_.y = -4.0f;
 
