@@ -45,7 +45,7 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelGoal_ = Model::CreateFromOBJ("goal");
-	modelJumpBlock_ = Model::CreateFromOBJ("goal");
+	modelJumpBlock_ = Model::CreateFromOBJ("jumpBlock");
 	modelBlock_ = Model::CreateFromOBJ("block");
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle", true);
@@ -82,18 +82,25 @@ void GameScene::Initialize() {
 
 	// 敵の生成
 	Goal* newGoal = new Goal();
-	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(18, 29);
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(1, 0);
 	newGoal->Initialize(modelGoal_, &viewProjection_, goalPosition);
 
 	goals_.push_back(newGoal);
 
-	for (int32_t i = 0; i < 3; ++i) {
-		JumpBlock* newJumpBlock = new JumpBlock();
-		Vector3 jumpBlockPosition = mapChipField_->GetMapChipPositionByIndex(22, 48);
-		newJumpBlock->Initialize(modelJumpBlock_, &viewProjection_, jumpBlockPosition);
+	JumpBlock* newJumpBlock = new JumpBlock();
+	Vector3 jumpBlockPosition = mapChipField_->GetMapChipPositionByIndex(8, 59);
+	newJumpBlock->Initialize(modelJumpBlock_, &viewProjection_, jumpBlockPosition);
+	jumpBlocks_.push_back(newJumpBlock);
 
-		jumpBlocks_.push_back(newJumpBlock);
-	}
+	JumpBlock* newJumpBlock_2 = new JumpBlock();
+	Vector3 jumpBlockPosition_2 = mapChipField_->GetMapChipPositionByIndex(13, 35);
+	newJumpBlock_2->Initialize(modelJumpBlock_, &viewProjection_, jumpBlockPosition_2);
+	jumpBlocks_.push_back(newJumpBlock_2);
+
+	JumpBlock* newJumpBlock_3 = new JumpBlock();
+	Vector3 jumpBlockPosition_3 = mapChipField_->GetMapChipPositionByIndex(15, 6);
+	newJumpBlock_3->Initialize(modelJumpBlock_, &viewProjection_, jumpBlockPosition_3);
+	jumpBlocks_.push_back(newJumpBlock_3);
 
 	phase_ = Phase::kPlay;
 }
